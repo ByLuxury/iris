@@ -17,3 +17,17 @@ func ErrorHandler(ctx iris.Context) {
 
 	ctx.Next()
 }
+
+// ErrorHandlerXml Xml通用错误处理
+func ErrorHandlerXml(ctx iris.Context) {
+	defer func() {
+		if err := recover(); err != nil {
+			if ctx.GetStatusCode() == iris.StatusOK {
+				ctx.StatusCode(iris.StatusInternalServerError)
+			}
+			ctx.XML(err)
+		}
+	}()
+
+	ctx.Next()
+}
